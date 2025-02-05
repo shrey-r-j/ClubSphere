@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.png';
-
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-hot-toast';
 const Login = () => {
   const [rollNo, setRollNo] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -12,18 +15,24 @@ const Login = () => {
         rollNo,
         password
       });
-
+  
       // Handle successful login
-      console.log('Login successful:', response.data);
-      // You might want to redirect or store the authentication token here
+      toast.success('Login successfull !');
+      // Redirect or store user data here
+      navigate('/student');
     } catch (error) {
-      // Handle error
       if (error.response) {
-        // The request was made and the server responded with a status code
+        // Server responded with an error status
         console.error('Login failed:', error.response.data.error);
+        alert(error.response.data.error);
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('No response from server:', error.request);
+        alert('Unable to connect to the server');
       } else {
-        // Something happened in setting up the request
+        // Other errors
         console.error('Error:', error.message);
+        alert('An error occurred');
       }
     }
   };
