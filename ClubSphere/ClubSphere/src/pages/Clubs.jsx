@@ -86,7 +86,7 @@ const Clubs = () => {
       name: "ETHIC-CRAFT",
       description: "ETHIC-CRAFT promotes ethical hacking and cybersecurity awareness.",
       image: EC,
-      category: 'Cultural'
+      category: 'Technical'
     },
     {
       id: 11,

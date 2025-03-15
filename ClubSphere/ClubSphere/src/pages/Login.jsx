@@ -11,26 +11,21 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', {
+      const response = await axios.post('http://localhost:3000/api/students/login', {
         rollNo,
         password
       });
   
-      // Handle successful login
       toast.success('Login successfull !');
-      // Redirect or store user data here
       navigate('/student');
     } catch (error) {
       if (error.response) {
-        // Server responded with an error status
         console.error('Login failed:', error.response.data.error);
         alert(error.response.data.error);
       } else if (error.request) {
-        // Request was made but no response received
         console.error('No response from server:', error.request);
         alert('Unable to connect to the server');
       } else {
-        // Other errors
         console.error('Error:', error.message);
         alert('An error occurred');
       }
