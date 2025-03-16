@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
@@ -40,7 +41,7 @@ const Signup = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post("http://localhost:3000/api/signup", {
+      const response = await axios.post("http://localhost:3000/api/students/signup", {
         rollNo: formData.rollNo,
         enrollmentNo: formData.enrollmentNo,
         firstName: formData.firstName,
@@ -48,8 +49,16 @@ const Signup = () => {
         password: formData.password,
       });
 
-      toast.success("Registration Successful");
-      console.log("Signup successful:", response.data);
+      if (response.status === 201) {
+        toast.success("Registration Successful");
+  
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+          navigate("/student");  // Change this to your actual login route
+        }, 2000);
+      }
+      // toast.success("Registration Successful");
+      // console.log("Signup successful:", response.data);
     } catch (error) {
       toast.error("Something Went Wrong !");
       console.log(error.response?.data?.message);

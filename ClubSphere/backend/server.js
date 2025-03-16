@@ -15,16 +15,21 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+
 app.use("/api/posts", postRoutes);
 app.use("/api/students", studentRoutes);
 
 // MongoDB Connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/club_sphere", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      "mongodb://127.0.0.1:27017/club_sphere",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        family: 4, // Force IPv4
+      }
+    );
     console.log("MongoDB Connected");
   } catch (error) {
     console.error("MongoDB Connection Error:", error);
@@ -42,5 +47,3 @@ connectDB().then(() => {
     console.log(`Server is listening on ${port}`);
   });
 });
-//End
-
