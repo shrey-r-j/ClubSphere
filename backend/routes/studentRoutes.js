@@ -38,6 +38,7 @@ router.post("/signup", async (req, res) => {
 });
 
 // Login Route
+var r="";
 router.post("/login", async (req, res) => {
   try {
     const { rollNo, password } = req.body;
@@ -57,9 +58,62 @@ router.post("/login", async (req, res) => {
     }
 
     res.status(200).json({ message: "Login successful", student });
+    r = student.rollNo;
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+router.get("/:rollNo", async (req, res) => {
+  try {
+    const { rollNo } = req.params;
+    const student = await Student.findOne({ rollNo });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.json({ completedHours: student.completedHours });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+// 📌 PUT update student's completed hours (Club Head only)
+router.put("/:rollNo", async (req, res) => {
+  try {
+    const { rollNo } = req.params;
+    const { completedHours } = req.body;
+
+    if (typeof completedHours !== "number" || completedHours < 0) {
+      return res.status(400).json({ message: "Invalid hours value" });
+    }
+
+    const student = await Student.findOneAndUpdate(
+      { rollNo },
+      { completedHours },
+      { new: true }
+    );
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.json({ message: "Hours updated successfully", completedHours: student.completedHours });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+router.get("/me", async (req, res)=>{
+  try{
+    const student = await Student.findOne({rollNo: r});
+    res.json(student);
+  }
+  catch(error){ 
+    res.status(500).json({message: "Server error", error});
   }
 });
 
