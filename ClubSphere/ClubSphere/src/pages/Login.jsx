@@ -15,7 +15,7 @@ const Login = () => {
         rollNo,
         password
       });
-  
+      localStorage.setItem("token",response.data.token);
       toast.success('Login successfull !');
       navigate('/student');
     } catch (error) {

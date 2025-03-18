@@ -6,6 +6,7 @@ import TeacherLayout from "./teacher";
 import Feed from "../pages/Feed";
 import Clubs from "../pages/Clubs";
 import Signup from "../pages/Signup";
+import Dashboard from "../pages/Dashboard";
 
 const router = createBrowserRouter([
   { path: "/", element: <Login/> },
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Feed /> }, 
       { path: "clubs", element: <Clubs /> },
+      { path: 'dashboard', element: <Dashboard/> },
     ],
   },
 
