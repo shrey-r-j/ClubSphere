@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import axios from "axios";
 
 const Dashboard = () => {
   const [completedHours, setCompletedHours] = useState(0);
@@ -8,25 +9,33 @@ const Dashboard = () => {
   
   useEffect(() => {
     const fetchHours = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token not found. Please log in.");
+        return;
+      }
+  
       try {
-        const rollNo = req.user.rollNo; 
-        const response = await fetch(`http://localhost:3000/api/students/${rollNo}`);
-        const data = await response.json();
+        const response = await axios.get("http://localhost:3000/api/students/me", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
 
-        if (response.ok) {
-          setCompletedHours(data.completedHours); 
+        if (response.data?.completedHours !== undefined) {
+          setCompletedHours(response.data.completedHours);
         } else {
-          console.error("Error fetching hours:", data.message);
+          console.error("Unexpected response:", response.data);
         }
       } catch (error) {
-        console.error("Failed to fetch completed hours:", error);
+        console.error("Failed to fetch completed hours:", error.response?.data?.message || error.message);
       }
     };
-
+  
     fetchHours();
   }, []);
-
-  const percentage = (completedHours / totalHours) * 100;
+  
+  const percentage = Math.min((completedHours / totalHours) * 100, 100);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-6">
@@ -36,18 +45,15 @@ const Dashboard = () => {
         </h2>
 
         <div className="flex flex-col items-center">
-          {/* Circular Progress Bar */}
           <div className="w-52 h-52 mb-6">
             <CircularProgressbar
               value={percentage}
               text={`${Math.round(percentage)}%`}
               styles={buildStyles({
                 textSize: "18px",
-                fontWeight: "600",
                 pathColor: `rgba(79, 70, 229, ${percentage / 100})`,
                 textColor: "#4F46E5",
                 trailColor: "#F3F4F6",
-                strokeLinecap: "round",
               })}
             />
           </div>
@@ -57,22 +63,20 @@ const Dashboard = () => {
               <span className="text-gray-600 font-medium">Progress</span>
               <span className="text-indigo-600 font-bold">{completedHours}/{totalHours} hours</span>
             </div>
-            
-            {/* Linear Progress Bar */}
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div 
-                className="bg-purple-700 h-3 rounded-full transition-all duration-500 ease-in-out"
+                className="bg-purple-700 h-3 rounded-full"
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
           </div>
 
-          <div className="text-center mb-6">
+          <div className="text-center">
             <p className="text-lg text-gray-700">
               You've completed <span className="font-bold text-indigo-600">{completedHours}</span> out of <span className="font-bold text-indigo-600">{totalHours}</span> required hours
             </p>
             <p className="text-sm text-gray-500 mt-1">
-              {totalHours - completedHours} hours remaining
+              {Math.max(totalHours - completedHours, 0)} hours remaining
             </p>
           </div>
         </div>

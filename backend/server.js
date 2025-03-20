@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import postRoutes from "./routes/posts.js";
 import studentRoutes from "./routes/studentRoutes.js";
+import clubHeadRoutes from "./routes/clubHeadRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use("/api/posts", postRoutes);
 app.use("/api/students", studentRoutes);
+app.use('/api/clubheads', clubHeadRoutes);
 
 // MongoDB Connection
 const connectDB = async () => {

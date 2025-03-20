@@ -6,43 +6,43 @@ import { useThemeStore } from "../store/useThemeStore";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-export const THEMES = [
+const THEMES = [
   "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
   "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
   "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",
   "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade",
   "night", "coffee", "winter", "dim", "nord", "sunset",
 ];
-//hi
-const Navbar = () => {
-  const [rollNo, setRollNo] = useState("");
+
+const ClubheadNavbar = () => {
+  const [clubName, setClubName] = useState("");
   const navigate = useNavigate();
   const { theme, setTheme } = useThemeStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // ✅ Fetch roll number from backend using /me route
+  // ✅ Fetch club name from backend using /me route
   useEffect(() => {
-    const fetchUserDetails = async () => {
+    const fetchClubDetails = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("Token not found. Please log in.");
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/students/me", {
+        const response = await axios.get("http://localhost:3000/api/clubheads/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setRollNo(response.data.rollNo);
+        setClubName(response.data.clubName);
       } catch (error) {
-        console.error("Error fetching user details:", error.response?.data?.message || error.message);
+        console.error("Error fetching club details:", error.response?.data?.message || error.message);
       }
     };
 
-    fetchUserDetails();
+    fetchClubDetails();
   }, []);
 
   // Close dropdown when clicking outside
@@ -63,7 +63,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     toast.success("Logged out successfully!");
-    navigate("/"); 
+    navigate("/");
   };
 
   const toggleTheme = () => {
@@ -80,7 +80,7 @@ const Navbar = () => {
 
       <div className="flex items-center">
         <NavLink 
-          to="/student" 
+          to="/clubhead" 
           className={({ isActive }) => 
             isActive 
               ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
@@ -90,15 +90,16 @@ const Navbar = () => {
         >
           Feed
         </NavLink>
+
         <NavLink 
-          to="/student/clubs" 
+          to="/clubhead/create-post" 
           className={({ isActive }) => 
             isActive 
-              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
-              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
+              ? "text-lg mx-4 text-green-400 border-b-2 border-green-400 pb-1 transition-all duration-300"
+              : "text-lg mx-4 hover:text-green-400 hover:border-b-2 hover:border-green-400 pb-1 transition-all duration-300"
           }
         >
-          Clubs
+          Create Post
         </NavLink>
       </div>
 
@@ -111,10 +112,9 @@ const Navbar = () => {
           <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 text-gray-800">
             <div className="px-4 py-3 border-b">
               <p className="text-sm text-gray-500">Signed in as</p>
-              <p className="font-medium text-gray-900">{rollNo || "Loading..."}</p>
+              <p className="font-medium text-gray-900">{clubName || "Loading..."}</p>
             </div>
 
-            <NavLink to="/student/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</NavLink>
             <div className="px-4 py-2 hover:bg-gray-100">
               <div className="flex justify-between items-center">
                 <span>Theme</span>
@@ -126,7 +126,13 @@ const Navbar = () => {
                 </button>
               </div>
             </div>
-            <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600">Logout</button>
+
+            <button 
+              onClick={handleLogout} 
+              className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600"
+            >
+              Logout
+            </button>
           </div>
         )}
       </div>
@@ -134,4 +140,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default ClubheadNavbar;

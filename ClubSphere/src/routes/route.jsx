@@ -7,9 +7,18 @@ import Feed from "../pages/Feed";
 import Clubs from "../pages/Clubs";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
+import RoleSelection from "../pages/RoleSelection";
+import ClubHeadLogin from "../pages/ClubHeadLogin";
+import TeacherLogin from "../pages/TeacherLogin";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Login/> },
+  { path: "/", element: <RoleSelection/> },
+
+  { path: "/student-login", element: <Login />},
+
+  { path: "/teacher-login", element: <TeacherLogin />},
+
+  {path: "/clubhead-login", element: <ClubHeadLogin/>},
 
   {path: "/signup", element: <Signup />},
 

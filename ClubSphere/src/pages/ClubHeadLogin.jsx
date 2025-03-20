@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import logo from '../assets/logo.png';
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
-import {toast} from 'react-hot-toast';
-const Login = () => {
-  const [rollNo, setRollNo] = useState('');
+import axios from 'axios';
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
+
+const ClubheadLogin = () => {
+  const [clubName, setClubName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/students/login', {
-        rollNo,
-        password
+      const response = await axios.post('http://localhost:3000/api/clubheads/login', {
+        clubName,
+        password,
       });
-      localStorage.setItem("token",response.data.token);
-      toast.success('Login successfull !');
-      navigate('/student');
+      localStorage.setItem('token', response.data.token);
+      toast.success('Login successful!');
+      navigate('/clubhead');
     } catch (error) {
       if (error.response) {
         console.error('Login failed:', error.response.data.error);
@@ -41,14 +42,14 @@ const Login = () => {
             <img src={logo} alt="ClubSphere Logo" className="w-full h-full object-cover rounded-full" />
           </div>
         </div>
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+        <h2 className="text-2xl font-semibold text-center mb-6">Clubhead Login</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Roll No.</label>
+            <label className="block text-sm font-medium">Club Name</label>
             <input
               type="text"
-              value={rollNo}
-              onChange={(e) => setRollNo(e.target.value)}
+              value={clubName}
+              onChange={(e) => setClubName(e.target.value)}
               className="w-full p-2 border rounded-lg mt-1 bg-gray-700 text-white border-gray-600"
               required
             />
@@ -69,16 +70,10 @@ const Login = () => {
           >
             Login
           </button>
-          <div className="flex flex-col items-center mt-4">
-            <p className="text-sm text-blue-500">Don't have an account?</p>
-            <a href="/signup" className="mt-2 w-full bg-green-500 text-white py-2 rounded-lg text-center hover:bg-green-600">
-              Sign Up
-            </a>
-          </div>
         </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default ClubheadLogin;

@@ -50,6 +50,7 @@ const Signup = () => {
 
       toast.success("Registration Successful");
       console.log("Signup successful:", response.data);
+      navigate("/");
     } catch (error) {
       toast.error("Something Went Wrong !");
       console.log(error.response?.data?.message);

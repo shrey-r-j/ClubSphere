@@ -49,7 +49,6 @@ const Feed = () => {
 
   return (
     <div className="container mx-auto max-w-xl px-4 py-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">Feed</h2>
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">No posts available</p>
       ) : (

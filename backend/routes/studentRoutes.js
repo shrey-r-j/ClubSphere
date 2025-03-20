@@ -1,9 +1,11 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import Student from "../models/Student.js";
-
+import {auth} from "../middleware/auth.middleware.js";
+import jwt from "jsonwebtoken";
 const router = express.Router();
 const saltRounds = 10;
+const JWT_KEY = "123";
 
 // Signup Route
 router.post("/signup", async (req, res) => {
@@ -38,7 +40,6 @@ router.post("/signup", async (req, res) => {
 });
 
 // Login Route
-var r="";
 router.post("/login", async (req, res) => {
   try {
     const { rollNo, password } = req.body;
@@ -57,8 +58,8 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    res.status(200).json({ message: "Login successful", student });
-    r = student.rollNo;
+    const token = jwt.sign({ rollNo: student.rollNo }, JWT_KEY);
+    res.status(200).json({ message: "Login successful", token, student });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -66,7 +67,21 @@ router.post("/login", async (req, res) => {
 });
 
 
-router.get("/:rollNo", async (req, res) => {
+// Get Student Details
+router.get("/me", auth, async (req, res) => {
+  try {
+    const student = await Student.findOne({ rollNo: req.rollNo });
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    res.json(student);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+// Get Student Progress
+router.get("/:rollNo", auth, async (req, res) => {
   try {
     const { rollNo } = req.params;
     const student = await Student.findOne({ rollNo });
@@ -81,8 +96,8 @@ router.get("/:rollNo", async (req, res) => {
   }
 });
 
-// 📌 PUT update student's completed hours (Club Head only)
-router.put("/:rollNo", async (req, res) => {
+// Update Completed Hours (Club Head only)
+router.put("/:rollNo", auth, async (req, res) => {
   try {
     const { rollNo } = req.params;
     const { completedHours } = req.body;
@@ -104,16 +119,6 @@ router.put("/:rollNo", async (req, res) => {
     res.json({ message: "Hours updated successfully", completedHours: student.completedHours });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
-  }
-});
-
-router.get("/me", async (req, res)=>{
-  try{
-    const student = await Student.findOne({rollNo: r});
-    res.json(student);
-  }
-  catch(error){ 
-    res.status(500).json({message: "Server error", error});
   }
 });
 
