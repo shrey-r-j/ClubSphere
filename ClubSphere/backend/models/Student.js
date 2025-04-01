@@ -7,7 +7,6 @@ const studentSchema = new mongoose.Schema({
   primaryClub: { type: String },
   password: { type: String, required: true },
   completedHours: { type: Number, default: 0 },
-
 });
 
 const Student = mongoose.model("Student", studentSchema);

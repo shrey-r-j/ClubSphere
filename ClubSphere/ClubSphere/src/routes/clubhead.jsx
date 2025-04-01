@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../pages/NavBar";
+import NavbarClub from "../pages/NavbarClub";
 
 const ClubHeadLayout = () => (
   <div>
-    <NavBar />
+    <NavbarClub />
     <Outlet />
   </div>
 );

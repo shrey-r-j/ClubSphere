@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import Student from "../models/Student.js";
+import {auth} from "../middleware/auth.middleware.js";
 import jwt from "jsonwebtoken";
 const router = express.Router();
 const saltRounds = 10;
@@ -65,22 +66,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Authentication Middleware with Bearer Token
-function auth(req, res, next) {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "No token provided" });
-    }
-    // console.log(authHeader);
-    const token = authHeader.split(" ")[1];
-    const decode = jwt.verify(token, JWT_KEY);
-    req.rollNo = decode.rollNo;
-    next();
-  } catch (error) {
-    res.status(403).json({ message: "Invalid token" });
-  }
-}
 
 // Get Student Details
 router.get("/me", auth, async (req, res) => {
@@ -136,6 +121,5 @@ router.put("/:rollNo", auth, async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
 
 export default router;

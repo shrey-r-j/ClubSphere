@@ -38,7 +38,10 @@ const Feed = () => {
     const fetchPosts = async () => {
       try {
         const res = await axios.get('http://localhost:3000/api/posts');
-        setPosts(res.data);
+        
+        // Sort posts by createdAt in descending order (latest first)
+        const sortedPosts = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setPosts(sortedPosts);
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
@@ -49,7 +52,6 @@ const Feed = () => {
 
   return (
     <div className="container mx-auto max-w-xl px-4 py-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">Feed</h2>
       {posts.length === 0 ? (
         <p className="text-center text-gray-500">No posts available</p>
       ) : (
@@ -59,16 +61,16 @@ const Feed = () => {
             const clubLogo = clubLogos[post.clubName] || 'https://via.placeholder.com/150';
 
             return (
-              <div 
-                key={post._id} 
+              <div
+                key={post._id}
                 className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm"
               >
                 {/* Club Header */}
                 <div className="flex items-center p-3 border-b border-gray-200">
                   <div className="w-10 h-10 rounded-full mr-3 overflow-hidden">
-                    <img 
-                      src={clubLogo} 
-                      alt={post.clubName} 
+                    <img
+                      src={clubLogo}
+                      alt={post.clubName}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -80,11 +82,11 @@ const Feed = () => {
                 </div>
 
                 {/* Post Image */}
-                {post.imageUrl && (
+                {post.image && (
                   <div className="aspect-square w-full overflow-hidden">
-                    <img 
-                      src={post.imageUrl} 
-                      alt="Post" 
+                    <img
+                      src={`data:${post.contentType};base64,${post.image}`}
+                      alt="Post"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -93,12 +95,12 @@ const Feed = () => {
                 {/* Post Content */}
                 <div className="p-3">
                   <p className="text-sm mb-2 text-gray-800">{post.caption}</p>
-                  
+
                   <div className="flex justify-between items-center">
                     <small className="text-xs text-gray-500">
                       {new Date(post.createdAt).toLocaleString()}
                     </small>
-                    
+
                     {/* Interaction Icons */}
                     <div className="flex space-x-3">
                       <button className="text-gray-500 hover:text-red-500">

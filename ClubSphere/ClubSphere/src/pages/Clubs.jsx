@@ -115,66 +115,66 @@ const Clubs = () => {
     ? clubsData 
     : clubsData.filter(club => club.category === selectedCategory);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 px-6 py-12">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          Student Clubs
-        </h1>
-
-        <div className="flex justify-center gap-4 mb-12">
-          {categories.map(category => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 rounded-full transition-all duration-300 text-lg ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-white text-gray-600 hover:bg-blue-50'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredClubs.map((club) => (
-            <div
-              key={club.id}
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
-            >
-              <div className="h-48 relative overflow-hidden bg-gray-50">
-                <img
-                  src={club.image}
-                  alt={club.name}
-                  className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-bold text-gray-800">{club.name}</h2>
-                  <span className="px-4 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-full">
-                    {club.category}
-                  </span>
+    return (
+      <div className="min-h-screen bg-base-100 px-6 py-12"> {/* ✅ Use DaisyUI theme */}
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-4xl font-bold text-center text-base-content mb-8"> {/* ✅ Theme-aware text */}
+            Student Clubs
+          </h1>
+    
+          <div className="flex justify-center gap-4 mb-12">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-6 py-3 rounded-full transition-all duration-300 text-lg ${
+                  selectedCategory === category
+                    ? "bg-primary text-primary-content shadow-lg" /* ✅ Theme colors */
+                    : "bg-base-200 text-base-content hover:bg-base-300"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+    
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredClubs.map((club) => (
+              <div
+                key={club.id}
+                className="group relative bg-base-200 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                <div className="h-48 relative overflow-hidden bg-base-300">
+                  <img
+                    src={club.image}
+                    alt={club.name}
+                    className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                  />
                 </div>
-
-                <p className="text-gray-600 mb-8 text-lg line-clamp-3">
-                  {club.description || 'Description coming soon...'}
-                </p>
-
-                <button className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium">
-                  See Events
-                </button>
+    
+                <div className="p-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-base-content">{club.name}</h2>
+                    <span className="px-4 py-1.5 text-sm bg-primary text-primary-content rounded-full">
+                      {club.category}
+                    </span>
+                  </div>
+    
+                  <p className="text-base-content/70 mb-8 text-lg line-clamp-3">
+                    {club.description || "Description coming soon..."}
+                  </p>
+    
+                  <button className="w-full px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary-focus transition-colors text-lg font-medium">
+                    See Events
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+    
 };
 
 export default Clubs;

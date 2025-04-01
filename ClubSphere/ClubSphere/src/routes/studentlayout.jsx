@@ -1,11 +1,13 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../pages/NavBar";
+import Navbar from "../pages/NavBar";
 
-const StudentLayout = () => (
-  <div>
-    <NavBar />
-    <Outlet /> 
-  </div>
-);
+const StudentLayout = () => {
+  return (
+    <div>
+      <Navbar />
+      <Outlet />
+    </div>
+  );
+};
 
 export default StudentLayout;
