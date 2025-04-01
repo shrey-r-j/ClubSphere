@@ -6,6 +6,17 @@ import axios from "axios";
 const Dashboard = () => {
   const [completedHours, setCompletedHours] = useState(0);
   const totalHours = 30;
+
+  // Extract primary color from computed styles
+  const [primaryColor, setPrimaryColor] = useState("#4F46E5"); // Default fallback
+
+  useEffect(() => {
+    const rootStyles = getComputedStyle(document.documentElement);
+    const themePrimary = rootStyles.getPropertyValue("--p").trim(); // Get primary color
+    if (themePrimary) {
+      setPrimaryColor(`hsl(${themePrimary})`);
+    }
+  }, []);
   
   useEffect(() => {
     const fetchHours = async () => {
@@ -38,9 +49,9 @@ const Dashboard = () => {
   const percentage = Math.min((completedHours / totalHours) * 100, 100);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-6">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-base-100 p-6">
+      <div className="w-full max-w-lg bg-base-200 rounded-2xl shadow-lg p-8">
+        <h2 className="text-3xl font-bold mb-8 text-center text-base-content">
           Student Dashboard
         </h2>
 
@@ -51,31 +62,31 @@ const Dashboard = () => {
               text={`${Math.round(percentage)}%`}
               styles={buildStyles({
                 textSize: "18px",
-                pathColor: `rgba(79, 70, 229, ${percentage / 100})`,
-                textColor: "#4F46E5",
-                trailColor: "#F3F4F6",
+                pathColor: primaryColor, // ✅ Dynamically set color
+                textColor: primaryColor,
+                trailColor: "hsl(var(--b3))",
               })}
             />
           </div>
 
-          <div className="bg-indigo-50 rounded-xl p-4 w-full mb-6">
+          <div className="bg-primary/10 rounded-xl p-4 w-full mb-6">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-gray-600 font-medium">Progress</span>
-              <span className="text-indigo-600 font-bold">{completedHours}/{totalHours} hours</span>
+              <span className="text-base-content/70 font-medium">Progress</span>
+              <span className="text-primary font-bold">{completedHours}/{totalHours} hours</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="w-full bg-base-300 rounded-full h-3">
               <div 
-                className="bg-purple-700 h-3 rounded-full"
+                className="bg-primary h-3 rounded-full"
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
           </div>
 
           <div className="text-center">
-            <p className="text-lg text-gray-700">
-              You've completed <span className="font-bold text-indigo-600">{completedHours}</span> out of <span className="font-bold text-indigo-600">{totalHours}</span> required hours
+            <p className="text-lg text-base-content">
+              You've completed <span className="font-bold text-primary">{completedHours}</span> out of <span className="font-bold text-primary">{totalHours}</span> required hours
             </p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-base-content/60 mt-1">
               {Math.max(totalHours - completedHours, 0)} hours remaining
             </p>
           </div>
@@ -83,6 +94,7 @@ const Dashboard = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Dashboard;

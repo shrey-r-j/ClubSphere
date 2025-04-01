@@ -5,14 +5,8 @@ import logo from "../assets/logo.png";
 import { useThemeStore } from "../store/useThemeStore";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { THEMES } from "../constants";
 
-export const THEMES = [
-  "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
-  "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
-  "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",
-  "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade",
-  "night", "coffee", "winter", "dim", "nord", "sunset",
-];
 //hi
 const Navbar = () => {
   const [rollNo, setRollNo] = useState("");
@@ -63,7 +57,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     toast.success("Logged out successfully!");
-    navigate("/"); 
+    navigate("/");
   };
 
   const toggleTheme = () => {
@@ -79,10 +73,10 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center">
-        <NavLink 
-          to="/student" 
-          className={({ isActive }) => 
-            isActive 
+        <NavLink
+          to="/student"
+          className={({ isActive }) =>
+            isActive
               ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
               : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
           }
@@ -90,10 +84,10 @@ const Navbar = () => {
         >
           Feed
         </NavLink>
-        <NavLink 
-          to="/student/clubs" 
-          className={({ isActive }) => 
-            isActive 
+        <NavLink
+          to="/student/clubs"
+          className={({ isActive }) =>
+            isActive
               ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
               : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
           }
@@ -106,7 +100,7 @@ const Navbar = () => {
         <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
           <FaUserCircle className="text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
         </button>
-        
+
         {isDropdownOpen && (
           <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 text-gray-800">
             <div className="px-4 py-3 border-b">
@@ -115,17 +109,10 @@ const Navbar = () => {
             </div>
 
             <NavLink to="/student/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</NavLink>
-            <div className="px-4 py-2 hover:bg-gray-100">
-              <div className="flex justify-between items-center">
-                <span>Theme</span>
-                <button 
-                  onClick={toggleTheme} 
-                  className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  {theme}
-                </button>
-              </div>
-            </div>
+
+
+            <NavLink to="/student/theme" className="block px-4 py-2 hover:bg-gray-100">Themes</NavLink>
+
             <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600">Logout</button>
           </div>
         )}

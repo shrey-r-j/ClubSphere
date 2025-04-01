@@ -79,10 +79,10 @@ const ClubheadNavbar = () => {
       </div>
 
       <div className="flex items-center">
-        <NavLink 
-          to="/clubhead" 
-          className={({ isActive }) => 
-            isActive 
+        <NavLink
+          to="/clubhead"
+          className={({ isActive }) =>
+            isActive
               ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
               : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
           }
@@ -91,15 +91,36 @@ const ClubheadNavbar = () => {
           Feed
         </NavLink>
 
-        <NavLink 
-          to="/clubhead/create-post" 
-          className={({ isActive }) => 
-            isActive 
+        <NavLink
+          to="/clubhead/post"
+          className={({ isActive }) =>
+            isActive
               ? "text-lg mx-4 text-green-400 border-b-2 border-green-400 pb-1 transition-all duration-300"
               : "text-lg mx-4 hover:text-green-400 hover:border-b-2 hover:border-green-400 pb-1 transition-all duration-300"
           }
         >
           Create Post
+        </NavLink>
+
+        <NavLink
+          to="/clubhead/event"
+          className={({ isActive }) =>
+            isActive
+              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
+              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
+          }
+        >
+          Create Event
+        </NavLink>
+        <NavLink
+          to="/clubhead/attendence"
+          className={({ isActive }) =>
+            isActive
+              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
+              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
+          }
+        >
+          Event Attendence
         </NavLink>
       </div>
 
@@ -107,7 +128,7 @@ const ClubheadNavbar = () => {
         <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
           <FaUserCircle className="text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
         </button>
-        
+
         {isDropdownOpen && (
           <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 text-gray-800">
             <div className="px-4 py-3 border-b">
@@ -115,24 +136,12 @@ const ClubheadNavbar = () => {
               <p className="font-medium text-gray-900">{clubName || "Loading..."}</p>
             </div>
 
-            <div className="px-4 py-2 hover:bg-gray-100">
-              <div className="flex justify-between items-center">
-                <span>Theme</span>
-                <button 
-                  onClick={toggleTheme} 
-                  className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  {theme}
-                </button>
-              </div>
-            </div>
+            <NavLink to="/clubhead/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</NavLink>
 
-            <button 
-              onClick={handleLogout} 
-              className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600"
-            >
-              Logout
-            </button>
+
+            <NavLink to="/clubhead/theme" className="block px-4 py-2 hover:bg-gray-100">Themes</NavLink>
+
+            <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600">Logout</button>
           </div>
         )}
       </div>

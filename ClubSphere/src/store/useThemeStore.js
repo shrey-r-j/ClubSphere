@@ -1,11 +1,17 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
+export const useThemeStore = create((set) => {
+  const savedTheme = localStorage.getItem("theme") || "coffee";
+  
+  // ✅ Apply the saved theme on load
+  document.documentElement.setAttribute("data-theme", savedTheme); 
 
-export const useThemeStore = create((set) => ({
-    theme: localStorage.getItem('chat-theme') || 'coffee',
-
+  return {
+    theme: savedTheme,
     setTheme: (theme) => {
-        localStorage.getItem('chat-theme', theme);
-        set({theme});
+      localStorage.setItem("theme", theme);
+      set({ theme });
+      document.documentElement.setAttribute("data-theme", theme); // ✅ Corrected
     },
-}));
+  };
+});
