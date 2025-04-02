@@ -15,6 +15,7 @@ import Post from "../pages/Post";
 import Dashboard2 from "../pages/Dashboard2";
 import Attendence from "../pages/Attendence";
 import Event from "../pages/Event";
+import MarkAttendence from "../pages/MarkAttendence"
 
 const router = createBrowserRouter([
   { path: "/", element: <RoleSelection /> },
@@ -45,7 +46,8 @@ const router = createBrowserRouter([
       { path: "post", element: <Post />},
       { path: "dashboard", element: <Dashboard2 /> },
       { path: "attendence", element: <Attendence/>},
-      { path: "event", element: <Event/>}
+      { path: "event", element: <Event/>},
+      { path: "mark/:eventId", element: <MarkAttendence /> },
     ],
   },
 

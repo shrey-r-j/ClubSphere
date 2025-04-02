@@ -16,6 +16,25 @@ router.get("/:clubName", async (req, res) => {
   }
 });
 
+
+// Create a new event with a Base64 image
+router.post("/", async (req, res) => {
+  try {
+    const { clubName, eventName, description, date, image, imgType } = req.body;
+
+    if (!clubName || !eventName || !description || !date || !image || !imgType) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const newEvent = new Event({ clubName, eventName, description, date, image, imgType, attendance: [] });
+
+    await newEvent.save();
+    res.status(201).json(newEvent);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Mark attendance for an event
 router.post("/:eventId/attendance", async (req, res) => {
   try {

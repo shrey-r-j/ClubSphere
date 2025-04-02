@@ -96,6 +96,24 @@ router.get("/:rollNo", auth, async (req, res) => {
   }
 });
 
+router.get("/club/:clubName", async (req, res) => {
+  try {
+    const { clubName } = req.params;
+    if (!clubName) return res.status(400).json({ error: "Club name is required" });
+
+    const students = await Student.find({ primaryClub: clubName });
+
+    if (students.length === 0) {
+      return res.status(404).json({ message: "No students found for this club" });
+    }
+
+    res.json(students);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+
 // Update Completed Hours (Club Head only)
 router.put("/:rollNo", auth, async (req, res) => {
   try {
