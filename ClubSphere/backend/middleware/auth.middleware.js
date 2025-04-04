@@ -28,7 +28,7 @@ export function auth2(req, res, next) {
     const decoded = jwt.verify(token, JWT_KEY);
 
     req.clubName = decoded.clubName;
-    console.log(decoded);
+    // console.log(decoded);
     next();
   } catch (error) {
     res.status(403).json({ message: "Invalid token" });

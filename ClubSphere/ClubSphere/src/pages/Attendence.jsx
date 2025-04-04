@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 const Attendance = () => {
   const [events, setEvents] = useState([]);
@@ -38,39 +39,39 @@ const Attendance = () => {
       }
     };
 
-    fetchEvents();
+    if (clubName) {
+      fetchEvents();
+    }
   }, [clubName]);
 
-  const markAttendance = async (eventId) => {
-    /* try {
-      await axios.post(`http://localhost:3000/api/events/${eventId}/attendance`, {
-        rollNo: studentRollNo,
-      });
-      alert("Attendance marked successfully!");
-    } catch (error) {
-      console.error("Error marking attendance:", error);
-      alert("Failed to mark attendance.");
-    } */
-  };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Events for {clubName}</h1>
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Events for {clubName}</h1>
       {events.length === 0 ? (
         <p>No events available.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <div key={event._id} className="p-4 border rounded-lg shadow">
+            <div key={event._id} className="p-4 border rounded-lg shadow-lg bg-white h-full flex flex-col">
+              {event.image && (
+                <div className="w-full h-48 rounded-lg overflow-hidden mb-4">
+                  <img
+                    src={`data:${event.contentType};base64,${event.image}`}
+                    alt="Event"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <h2 className="text-xl font-semibold">{event.eventName}</h2>
-              <p className="text-gray-600">{event.description}</p>
-              <p className="text-gray-500">Date: {new Date(event.date).toLocaleDateString()}</p>
-              <button
-                onClick={() => markAttendance(event._id)}
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              <p className="text-gray-600 mt-2 flex-grow">{event.description}</p>
+              <p className="text-gray-500 mt-2">Date: {new Date(event.date).toLocaleDateString()}</p>
+              <NavLink
+                to={`/clubhead/mark/${event._id}`}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 w-full"
               >
                 Mark Attendance
-              </button>
+              </NavLink>
             </div>
           ))}
         </div>

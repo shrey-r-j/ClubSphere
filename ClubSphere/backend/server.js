@@ -40,11 +40,6 @@ const connectDB = async () => {
   }
 };
 
-
-app.get("/", (req, res) => {
-  res.send("Server is ready");
-});
-
 // Start Server
 connectDB().then(() => {
   app.listen(port, () => {
