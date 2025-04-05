@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import Student from "../models/Student.js";
+import Event from "../models/Event.js";
 import {auth} from "../middleware/auth.middleware.js";
 import jwt from "jsonwebtoken";
 const router = express.Router();
@@ -137,6 +138,25 @@ router.put("/:rollNo", auth, async (req, res) => {
     res.json({ message: "Hours updated successfully", completedHours: student.completedHours });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
+  }
+});
+
+router.get("/events/attended",auth,async(req,res)=>{
+  try{
+    // console.log(req.rollNo);
+    const roll = req.rollNo;
+    console.log(roll);
+    // const atEvent = await Event.find({attendance:roll});
+    // const attendedEvents = await Event.find({ attendance: { $in: ["21234"] } });
+    const attendedEvents = await Event.find({ attendance: roll });
+
+    // console.log(attendedEvents);
+    res.json(attendedEvents);
+  }
+  catch(error){
+    res.json({
+      message : "Server error",
+    });
   }
 });
 

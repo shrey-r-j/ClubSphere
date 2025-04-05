@@ -10,7 +10,7 @@ const EventCreation = () => {
   const [date, setDate] = useState("");
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
-
+  
   useEffect(() => {
     const fetchClubDetails = async () => {
       const token = localStorage.getItem("token");
