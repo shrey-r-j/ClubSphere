@@ -118,22 +118,7 @@ const Dashboard = () => {
       </div>
 
       {/* Attended Events Section */}
-      <div className="w-full mt-8">
-        <h3 className="text-xl font-bold text-base-content mb-4">Attended Events</h3>
-        {attendedEvents.length === 0 ? (
-          <p className="text-base-content/60">No events attended yet.</p>
-        ) : (
-          <ul className="space-y-4">
-            {attendedEvents.map((event) => (
-              <li key={event._id} className="bg-base-200 p-4 rounded-lg shadow">
-                <h4 className="text-lg font-semibold">{event.eventName}</h4>
-                <p className="text-sm text-base-content/70">{event.clubName}</p>
-                <p className="text-xs text-base-content/50">{new Date(event.date).toLocaleDateString()}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      
     </div>
   );
 };

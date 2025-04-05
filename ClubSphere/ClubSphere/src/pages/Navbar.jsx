@@ -15,6 +15,34 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [attendedEvents, setAttendedEvents] = useState([]);
+
+  // Fetch attended events from backend
+  useEffect(() => {
+    const fetchAttendedEvents = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token not found. Please log in.");
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:3000/api/students/events/attended", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("Fetched Attended Events:", response.data); // Debug log
+        setAttendedEvents(response.data);
+      } catch (error) {
+        console.error("Failed to fetch attended events:", error.response?.data?.message || error.message);
+      }
+    };
+
+    fetchAttendedEvents();
+  }, []);
+
+  
+
   // ✅ Fetch roll number from backend using /me route
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -72,28 +100,10 @@ const Navbar = () => {
         <span className="text-xl font-semibold">ClubSphere</span>
       </div>
 
-      <div className="flex items-center">
-        <NavLink
-          to="/student"
-          className={({ isActive }) =>
-            isActive
-              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
-              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
-          }
-          end
-        >
-          Feed
-        </NavLink>
-        <NavLink
-          to="/student/clubs"
-          className={({ isActive }) =>
-            isActive
-              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
-              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
-          }
-        >
-          Clubs
-        </NavLink>
+      <div className="flex items-center space-x-6">
+        <NavLink to="/student" className={({ isActive }) => (isActive ? "text-blue-400 border-b-2 border-blue-400" : "hover:text-blue-400")}>Feed</NavLink>
+        <NavLink to="/student/clubs" className={({ isActive }) => (isActive ? "text-blue-400 border-b-2 border-blue-400" : "hover:text-blue-400")}>Clubs</NavLink>
+        <NavLink to="/student/events-attended" className={({ isActive }) => (isActive ? "text-blue-400 border-b-2 border-blue-400" : "hover:text-blue-400")}>Attended Events</NavLink>
       </div>
 
       <div className="relative" ref={dropdownRef}>
@@ -107,12 +117,8 @@ const Navbar = () => {
               <p className="text-sm text-gray-500">Signed in as</p>
               <p className="font-medium text-gray-900">{rollNo || "Loading..."}</p>
             </div>
-
             <NavLink to="/student/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</NavLink>
-
-
             <NavLink to="/student/theme" className="block px-4 py-2 hover:bg-gray-100">Themes</NavLink>
-
             <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600">Logout</button>
           </div>
         )}

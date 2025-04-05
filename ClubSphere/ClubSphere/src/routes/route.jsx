@@ -16,6 +16,7 @@ import Dashboard2 from "../pages/Dashboard2";
 import Attendence from "../pages/Attendence";
 import Event from "../pages/Event";
 import MarkAttendence from "../pages/MarkAttendence"
+import AttendedEvents from "../pages/StudentEventAttend"
 
 const router = createBrowserRouter([
   { path: "/", element: <RoleSelection /> },
@@ -33,6 +34,9 @@ const router = createBrowserRouter([
       { path: "clubs", element: <Clubs /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "theme", element: <Theme /> },
+      // {path : "attendedevents",element :<StudentEventAttend/>},
+      { path: "events-attended", element: <AttendedEvents /> },
+
     ],
   },
 
