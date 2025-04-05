@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const MarkAttendance = () => {
   const [students, setStudents] = useState([]);
@@ -9,6 +10,7 @@ const MarkAttendance = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const { eventId } = useParams();  // Get eventId from URL params
 
   useEffect(() => {
     const fetchClubDetails = async () => {
@@ -79,23 +81,17 @@ const MarkAttendance = () => {
       return;
     }
 
-    /* Uncomment when API is ready
     try {
       await axios.post(`http://localhost:3000/api/events/${eventId}/attendance`, {
         attendance: selectedStudents,
       });
       setSubmitSuccess(true);
-      setTimeout(() => setSubmitSuccess(false), 3000);
-      // Reset selections after successful submission
+      setTimeout(() => setSubmitSuccess(false), 3000); // Hide success message after 3 seconds
       setSelectedStudents([]);
     } catch (error) {
       setError("Error marking attendance: " + (error.response?.data?.message || error.message));
-    } */
+    }
     
-    // For testing
-    setSubmitSuccess(true);
-    setTimeout(() => setSubmitSuccess(false), 3000);
-    console.log("Submitting attendance for:", selectedStudents);
   };
 
   const filteredStudents = students.filter(

@@ -1,5 +1,6 @@
 import express from "express";
 import Event from "../models/Event.js";
+import Student from "../models/Student.js"; // Assuming you have a Student model
 
 const router = express.Router();
 
@@ -38,20 +39,35 @@ router.post("/", async (req, res) => {
 // Mark attendance for an event
 router.post("/:eventId/attendance", async (req, res) => {
   try {
-    const { eventId } = req.params;
-    const { rollNo } = req.body;
+      const { eventId } = req.params;
+      const { attendance } = req.body; 
 
-    const event = await Event.findById(eventId);
-    if (!event) return res.status(404).json({ error: "Event not found" });
+      if (!attendance || !Array.isArray(attendance) || attendance.length === 0) {
+          return res.status(400).json({ message: "Attendance list is required" });
+      }
 
-    if (!event.attendance.includes(rollNo)) {
-      event.attendance.push(rollNo);
+      // Check if event exists
+      const event = await Event.findById(eventId);
+      if (!event) {
+          return res.status(404).json({ message: "Event not found" });
+      }
+
+      // Verify students exist
+      const students = await Student.find({ rollNo: { $in: attendance } });
+
+      if (students.length !== attendance.length) {
+          return res.status(400).json({ message: "Some students not found in the database" });
+      }
+
+      // Update event attendance
+      event.attendance = [...new Set([...event.attendance, ...attendance])]; // Avoid duplicates
       await event.save();
-    }
 
-    res.json({ message: "Attendance marked successfully!" });
+      return res.status(200).json({ message: "Attendance marked successfully", attendance: event.attendance });
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.error("Error marking attendance:", error);
+      return res.status(500).json({ message: "Internal server error" });
   }
 });
 
