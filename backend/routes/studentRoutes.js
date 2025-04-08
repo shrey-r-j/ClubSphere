@@ -32,7 +32,8 @@ router.post("/signup", async (req, res) => {
     });
 
     await newStudent.save();
-    res.status(201).json({ message: "User created successfully" });
+    const token = jwt.sign({ rollNo: rollNo }, JWT_KEY);
+    res.status(201).json({ message: "User created successfully", token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to create user" });
