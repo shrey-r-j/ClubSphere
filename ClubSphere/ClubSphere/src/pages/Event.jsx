@@ -9,8 +9,9 @@ const EventCreation = () => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [image, setImage] = useState(null);
+  const [credit_hours, setCreditHours] = useState("");
   const fileInputRef = useRef(null);
-  
+
   useEffect(() => {
     const fetchClubDetails = async () => {
       const token = localStorage.getItem("token");
@@ -84,6 +85,7 @@ const EventCreation = () => {
       date,
       image: image.base64,
       imgType: image.contentType,
+      credit_hours,
     };
     try {
       await axios.post("http://localhost:3000/api/events", eventData);
@@ -101,7 +103,7 @@ const EventCreation = () => {
 
   return (
     <div className="max-w-lg mx-auto bg-white mt-10 p-8 rounded-2xl shadow-md border border-gray-100">
-      <h1 className="text-3xl font-bold text-gray-800 text-center">Create Event</h1>
+      <h1 className="text-3xl font-bold text-gray-800 text-center mb-2">Create Event</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <input
           type="text"
@@ -120,6 +122,12 @@ const EventCreation = () => {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          className="w-full px-4 py-3 border rounded-xl"
+        />
+        <input
+          placeholder="Credit Hours"
+          value={credit_hours}
+          onChange={(e) => setCreditHours(e.target.value)}
           className="w-full px-4 py-3 border rounded-xl"
         />
         <div className="relative group">

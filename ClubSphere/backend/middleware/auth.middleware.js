@@ -34,3 +34,22 @@ export function auth2(req, res, next) {
     res.status(403).json({ message: "Invalid token" });
   }
 }
+
+
+//changes left...
+export function auth3(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, JWT_KEY);
+
+    req.ID = decoded.teacher;
+    next();
+  } catch (error) {
+    res.status(403).json({ message: "Invalid token" });
+  }
+}

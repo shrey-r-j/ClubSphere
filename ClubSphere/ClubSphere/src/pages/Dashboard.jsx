@@ -6,44 +6,18 @@ import axios from "axios";
 const Dashboard = () => {
   const [completedHours, setCompletedHours] = useState(0);
   const totalHours = 30;
-  const [attendedEvents, setAttendedEvents] = useState([]);
-
-  // Fetch attended events from backend
-  useEffect(() => {
-    const fetchAttendedEvents = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("Token not found. Please log in.");
-        return;
-      }
-
-      try {
-        const response = await axios.get("http://localhost:3000/api/students/events/attended", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        console.log("Fetched Attended Events:", response.data); // Debug log
-        setAttendedEvents(response.data);
-      } catch (error) {
-        console.error("Failed to fetch attended events:", error.response?.data?.message || error.message);
-      }
-    };
-
-    fetchAttendedEvents();
-  }, []);
 
   // Extract primary color from computed styles
-  const [primaryColor, setPrimaryColor] = useState("#4F46E5");
+  const [primaryColor, setPrimaryColor] = useState("#4F46E5"); // Default fallback
 
   useEffect(() => {
     const rootStyles = getComputedStyle(document.documentElement);
-    const themePrimary = rootStyles.getPropertyValue("--p").trim();
+    const themePrimary = rootStyles.getPropertyValue("--p").trim(); // Get primary color
     if (themePrimary) {
       setPrimaryColor(`hsl(${themePrimary})`);
     }
   }, []);
-
-  // Fetch completed hours
+  
   useEffect(() => {
     const fetchHours = async () => {
       const token = localStorage.getItem("token");
@@ -51,10 +25,12 @@ const Dashboard = () => {
         console.error("Token not found. Please log in.");
         return;
       }
-
+  
       try {
         const response = await axios.get("http://localhost:3000/api/students/me", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
         });
 
         if (response.data?.completedHours !== undefined) {
@@ -66,10 +42,10 @@ const Dashboard = () => {
         console.error("Failed to fetch completed hours:", error.response?.data?.message || error.message);
       }
     };
-
+  
     fetchHours();
   }, []);
-
+  
   const percentage = Math.min((completedHours / totalHours) * 100, 100);
 
   return (
@@ -86,7 +62,7 @@ const Dashboard = () => {
               text={`${Math.round(percentage)}%`}
               styles={buildStyles({
                 textSize: "18px",
-                pathColor: primaryColor,
+                pathColor: primaryColor, // ✅ Dynamically set color
                 textColor: primaryColor,
                 trailColor: "hsl(var(--b3))",
               })}
@@ -116,11 +92,9 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Attended Events Section */}
-      
     </div>
   );
+  
 };
 
 export default Dashboard;

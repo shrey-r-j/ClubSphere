@@ -6,6 +6,7 @@ import postRoutes from "./routes/posts.js";
 import studentRoutes from "./routes/studentRoutes.js";
 import clubHeadRoutes from "./routes/clubHeadRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import teacherRoutes from "./routes/teacherRoutes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use("/api/posts", postRoutes);
 app.use("/api/students", studentRoutes);
 app.use('/api/clubheads', clubHeadRoutes);
+app.use('/api/teachers', teacherRoutes);
 app.use('/api/events', eventRoutes);
 
 // MongoDB Connection
