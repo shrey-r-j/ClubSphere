@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
 
+// const attendanceSchema = new mongoose.Schema({
+//   rollNumber: { type: String, required: true },
+//   proofImage: { type: String }, 
+//   imgType: { type: String }, 
+//   status: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" },
+// });
 const attendanceSchema = new mongoose.Schema({
   rollNumber: { type: String, required: true },
   proofImage: { type: String }, 
   imgType: { type: String }, 
   status: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" },
+  creditGranted: { type: Boolean, default: false } // ✅ Ensures credit is granted only once per event
 });
 
 const eventSchema = new mongoose.Schema({

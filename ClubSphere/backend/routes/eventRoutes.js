@@ -169,6 +169,37 @@ router.put("/update-attendance/:eventId", async (req, res) => {
   }
 });
 
+// router.put("/attendance/lock/:eventId", async (req, res) => {
+//   try {
+//     const { eventId } = req.params;
+//     const event = await Event.findById(eventId);
+
+//     if (!event) {
+//       return res.status(404).json({ message: "Event not found" });
+//     }
+
+//     // Get approved students
+//     const approvedStudents = event.attendance.filter(att => att.status === "Approved");
+
+//     if (approvedStudents.length === 0) {
+//       return res.status(400).json({ message: "No approved attendance found" });
+//     }
+
+//     const creditHours = parseInt(event.credit_hours, 10);
+
+//     // Update students in bulk using `$inc`
+//     await Student.updateMany(
+//       { rollNo: { $in: approvedStudents.map(s => s.rollNumber) } }, 
+//       { $inc: { completedHours: creditHours } }
+//     );
+
+//     res.status(200).json({ message: "Attendance locked successfully!" });
+//   } catch (error) {
+//     console.error("Error locking attendance:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
 router.put("/attendance/lock/:eventId", async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -178,22 +209,31 @@ router.put("/attendance/lock/:eventId", async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // Get approved students
-    const approvedStudents = event.attendance.filter(att => att.status === "Approved");
+    // Get students who are approved but haven't received credit for this event
+    const newlyApprovedStudents = event.attendance.filter(
+      att => att.status === "Approved" && !att.creditGranted
+    );
 
-    if (approvedStudents.length === 0) {
-      return res.status(400).json({ message: "No approved attendance found" });
+    if (newlyApprovedStudents.length === 0) {
+      return res.status(400).json({ message: "No new approved attendance found for this event" });
     }
 
     const creditHours = parseInt(event.credit_hours, 10);
 
-    // Update students in bulk using `$inc`
+    // Update student records in bulk
     await Student.updateMany(
-      { rollNo: { $in: approvedStudents.map(s => s.rollNumber) } }, 
+      { rollNo: { $in: newlyApprovedStudents.map(s => s.rollNumber) } }, 
       { $inc: { completedHours: creditHours } }
     );
 
-    res.status(200).json({ message: "Attendance locked successfully!" });
+    // Mark these students as credited in this specific event
+    await Event.updateOne(
+      { _id: eventId },
+      { $set: { "attendance.$[elem].creditGranted": true } },
+      { arrayFilters: [{ "elem.rollNumber": { $in: newlyApprovedStudents.map(s => s.rollNumber) } }] }
+    );
+
+    res.status(200).json({ message: "Attendance locked successfully for this event!" });
   } catch (error) {
     console.error("Error locking attendance:", error);
     res.status(500).json({ message: "Internal server error" });
