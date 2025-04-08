@@ -5,35 +5,34 @@ import logo from "../assets/logo.png";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-
-const ClubheadNavbar = () => {
-  const [clubName, setClubName] = useState("");
+const TeacherNavbar = () => {
+  const [ID, setID] = useState("");
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   // ✅ Fetch club name from backend using /me route
   useEffect(() => {
-    const fetchClubDetails = async () => {
+    const fetchTeacherDetails = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("Token not found. Please log in.");
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/clubheads/me", {
+        const response = await axios.get("http://localhost:3000/api/teachers/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setClubName(response.data.clubName);
+        setID(response.data.ID);
       } catch (error) {
-        console.error("Error fetching club details:", error.response?.data?.message || error.message);
+        console.error("Error fetching Teacher details:", error.response?.data?.message || error.message);
       }
     };
 
-    fetchClubDetails();
+    fetchTeacherDetails();
   }, []);
 
   // Close dropdown when clicking outside
@@ -57,6 +56,7 @@ const ClubheadNavbar = () => {
     navigate("/");
   };
 
+
   return (
     <nav className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md">
       <div className="flex items-center">
@@ -66,7 +66,7 @@ const ClubheadNavbar = () => {
 
       <div className="flex items-center">
         <NavLink
-          to="/clubhead"
+          to="/teacher"
           className={({ isActive }) =>
             isActive
               ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
@@ -78,28 +78,7 @@ const ClubheadNavbar = () => {
         </NavLink>
 
         <NavLink
-          to="/clubhead/post"
-          className={({ isActive }) =>
-            isActive
-              ? "text-lg mx-4 text-green-400 border-b-2 border-green-400 pb-1 transition-all duration-300"
-              : "text-lg mx-4 hover:text-green-400 hover:border-b-2 hover:border-green-400 pb-1 transition-all duration-300"
-          }
-        >
-          Create Post
-        </NavLink>
-
-        <NavLink
-          to="/clubhead/event"
-          className={({ isActive }) =>
-            isActive
-              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
-              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
-          }
-        >
-          Create Event
-        </NavLink>
-        <NavLink
-          to="/clubhead/attendence"
+          to="/teacher/attendance"
           className={({ isActive }) =>
             isActive
               ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
@@ -119,13 +98,10 @@ const ClubheadNavbar = () => {
           <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 text-gray-800">
             <div className="px-4 py-3 border-b">
               <p className="text-sm text-gray-500">Signed in as</p>
-              <p className="font-medium text-gray-900">{clubName || "Loading..."}</p>
+              <p className="font-medium text-gray-900">{ID || "Loading..."}</p>
             </div>
 
-            <NavLink to="/clubhead/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</NavLink>
-
-
-            <NavLink to="/clubhead/theme" className="block px-4 py-2 hover:bg-gray-100">Themes</NavLink>
+            <NavLink to="/teacher/theme" className="block px-4 py-2 hover:bg-gray-100">Themes</NavLink>
 
             <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-red-50 text-red-600">Logout</button>
           </div>
@@ -135,4 +111,4 @@ const ClubheadNavbar = () => {
   );
 };
 
-export default ClubheadNavbar;
+export default TeacherNavbar;

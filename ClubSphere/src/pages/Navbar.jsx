@@ -94,6 +94,16 @@ const Navbar = () => {
         >
           Clubs
         </NavLink>
+        <NavLink
+          to="/student/proof"
+          className={({ isActive }) =>
+            isActive
+              ? "text-lg mx-4 text-blue-400 border-b-2 border-blue-400 pb-1 transition-all duration-300"
+              : "text-lg mx-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 pb-1 transition-all duration-300"
+          }
+        >
+          Upload Proof
+        </NavLink>
       </div>
 
       <div className="relative" ref={dropdownRef}>

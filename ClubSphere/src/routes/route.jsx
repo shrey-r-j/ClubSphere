@@ -16,6 +16,9 @@ import Dashboard2 from "../pages/Dashboard2";
 import Attendence from "../pages/Attendence";
 import Event from "../pages/Event";
 import MarkAttendence from "../pages/MarkAttendence"
+import Proof from "../pages/Proof";
+import TeacherAttendence from "../pages/TeacherAttendance";
+import EventAttendanceDetails from "../pages/EventAttendenceDetails";
 
 const router = createBrowserRouter([
   { path: "/", element: <RoleSelection /> },
@@ -33,6 +36,7 @@ const router = createBrowserRouter([
       { path: "clubs", element: <Clubs /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "theme", element: <Theme /> },
+      { path: 'proof', element: <Proof />}
     ],
   },
 
@@ -56,7 +60,10 @@ const router = createBrowserRouter([
     element: <TeacherLayout />,
     children: [
       { index: true, element: <Feed /> },
-      { path: "clubs", element: <Clubs /> },
+      //{ path: "clubs", element: <Clubs /> },
+      { path: "theme", element: <Theme /> },
+      { path: 'attendance', element: <TeacherAttendence /> },
+      { path: "event-attendance/:eventId", element: <EventAttendanceDetails /> },  
     ],
   },
 ]);

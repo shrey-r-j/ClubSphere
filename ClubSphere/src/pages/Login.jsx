@@ -41,7 +41,7 @@ const Login = () => {
             <img src={logo} alt="ClubSphere Logo" className="w-full h-full object-cover rounded-full" />
           </div>
         </div>
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+        <h2 className="text-2xl font-semibold text-center mb-6">Student Login</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-sm font-medium">Roll No.</label>

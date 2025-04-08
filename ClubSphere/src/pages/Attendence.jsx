@@ -65,7 +65,9 @@ const Attendance = () => {
               )}
               <h2 className="text-xl font-semibold">{event.eventName}</h2>
               <p className="text-gray-600 mt-2 flex-grow">{event.description}</p>
-              <p className="text-gray-500 mt-2">Date: {new Date(event.date).toLocaleDateString()}</p>
+              <p className="text-gray-500 mt-2">
+  Date: {new Date(event.date).toLocaleDateString()} | Credit Hours: {event.credit_hours}
+</p>
               <NavLink
                 to={`/clubhead/mark/${event._id}`}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 w-full"
