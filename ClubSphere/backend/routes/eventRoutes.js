@@ -240,5 +240,14 @@ router.put("/attendance/lock/:eventId", async (req, res) => {
   }
 });
 
+router.get('/details/:eventId',async (req,res)=>{
+  const {eventId} = req.params;
+  const event = await Event.findById(eventId);
+  if(!event){
+    return res.status(400).send("Event not found");
+  }
+  res.json(event);
+});
+
 
 export default router;

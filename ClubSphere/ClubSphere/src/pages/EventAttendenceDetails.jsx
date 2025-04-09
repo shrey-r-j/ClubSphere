@@ -10,6 +10,8 @@ const EventAttendanceDetails = () => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all"); // "all", "pending", "approved", "rejected"
   const [searchTerm, setSearchTerm] = useState("");
+  // New state for enlarged image modal
+  const [enlargedImage, setEnlargedImage] = useState(null);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -66,6 +68,23 @@ const EventAttendanceDetails = () => {
       console.error("Error updating attendance:", error);
       alert("Failed to update attendance status. Please try again.");
     }
+  };
+
+  // Function to open the enlarged image modal
+  const openImageModal = (imageData, imageType) => {
+    setEnlargedImage({
+      src: `data:${imageType || 'image/jpeg'};base64,${imageData}`,
+      type: imageType || 'image/jpeg'
+    });
+    // Add overflow hidden to body to prevent scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Function to close the enlarged image modal
+  const closeImageModal = () => {
+    setEnlargedImage(null);
+    // Restore scrolling
+    document.body.style.overflow = 'auto';
   };
 
   const filteredAttendance = event?.attendance.filter(record => {
@@ -272,7 +291,10 @@ const EventAttendanceDetails = () => {
                 {record.proofImage && (
                   <div className="md:w-1/3">
                     <p className="text-sm text-gray-500 mb-2">Proof Image:</p>
-                    <div className="w-full h-40 border rounded-lg overflow-hidden bg-white">
+                    <div 
+                      className="w-full h-40 border rounded-lg overflow-hidden bg-white cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => openImageModal(record.proofImage, record.imgType)}
+                    >
                       <img 
                         src={`data:${record.imgType || 'image/jpeg'};base64,${record.proofImage}`} 
                         alt="Attendance Proof" 
@@ -321,6 +343,34 @@ const EventAttendanceDetails = () => {
             </div>
           ))}
         </div>  
+      )}
+
+      {/* Image Modal */}
+      {enlargedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 p-4"
+          onClick={closeImageModal}
+        >
+          <div className="relative max-w-4xl w-full max-h-screen">
+            {/* Close button */}
+            <button 
+              className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg z-10 hover:bg-gray-100"
+              onClick={closeImageModal}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Enlarged image */}
+            <img 
+              src={enlargedImage.src} 
+              alt="Enlarged proof" 
+              className="w-full h-auto max-h-screen object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking directly on the image
+            />
+          </div>
+        </div>
       )}
     </div>
   );

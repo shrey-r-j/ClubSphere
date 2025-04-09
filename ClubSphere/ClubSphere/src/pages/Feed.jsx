@@ -147,8 +147,8 @@ function App() {
 
                   {/* Interaction Bar */}
                   <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-300">
-                    <button className="flex items-center space-x-2 text-base-content/70 hover:text-primary transition-colors duration-200">
-                      <Heart className="w-5 h-5" />
+                  <button className="flex items-center space-x-2 text-base-content/70 hover:text-red-500 transition-colors duration-200">
+                  <Heart className="w-5 h-5" />
                       <span className="text-sm">Like</span>
                     </button>
                     

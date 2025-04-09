@@ -20,6 +20,7 @@ import Proof from "../pages/Proof";
 import TeacherAttendence from "../pages/TeacherAttendance";
 import EventAttendanceDetails from "../pages/EventAttendenceDetails";
 
+
 const router = createBrowserRouter([
   { path: "/", element: <RoleSelection /> },
 
@@ -36,7 +37,8 @@ const router = createBrowserRouter([
       { path: "clubs", element: <Clubs /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "theme", element: <Theme /> },
-      { path: 'proof', element: <Proof />}
+      { path: 'proof', element: <Proof />},
+
     ],
   },
 
