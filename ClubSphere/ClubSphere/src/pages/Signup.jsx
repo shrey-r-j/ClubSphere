@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     rollNo: "",
     enrollmentNo: "",
@@ -48,9 +50,11 @@ const Signup = () => {
         password: formData.password,
       });
 
-      toast.success("Registration Successful");
-      console.log("Signup successful:", response.data);
-      navigate("/");
+      if (response.status === 201) {
+        localStorage.setItem("token",response.data.token);
+        toast.success("Registration Successful");
+        navigate("/");
+      }
     } catch (error) {
       toast.error("Something Went Wrong !");
       console.log(error.response?.data?.message);

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+// import  {navigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import ACM from "../assets/ACM.jpg"
 import Art from "../assets/ArtCircle.jpeg"
 import EDC from "../assets/EDC.jpg"
@@ -16,6 +19,11 @@ import IEEE from "../assets/IEEE.jpg"
 const Clubs = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const categories = ['All', 'Technical', 'Cultural', 'Professional'];
+  const navigate = useNavigate();
+
+  const seeUpcoming = (id) => {
+    navigate(`/student/upcoming-events/${id}`);
+  };
 
   const clubsData = [
     {
@@ -164,9 +172,11 @@ const Clubs = () => {
                     {club.description || "Description coming soon..."}
                   </p>
     
-                  <button className="w-full px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary-focus transition-colors text-lg font-medium">
+                  { <button onClick={() => {
+                      seeUpcoming(club.name);
+                    }}  className="w-full px-6 py-3 bg-primary text-primary-content rounded-lg hover:bg-primary-focus transition-colors text-lg font-medium">
                     See Events
-                  </button>
+                  </button> }
                 </div>
               </div>
             ))}

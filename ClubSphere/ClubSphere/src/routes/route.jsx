@@ -19,6 +19,7 @@ import MarkAttendence from "../pages/MarkAttendence"
 import Proof from "../pages/Proof";
 import TeacherAttendence from "../pages/TeacherAttendance";
 import EventAttendanceDetails from "../pages/EventAttendenceDetails";
+import UpcomingEvents from "../pages/UpcomingEvents";
 
 
 const router = createBrowserRouter([
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "theme", element: <Theme /> },
       { path: 'proof', element: <Proof />},
-
+      { path: 'upcoming-events/:clubname', element: <UpcomingEvents />}
     ],
   },
 
