@@ -88,7 +88,10 @@ const EventCreation = () => {
       credit_hours,
     };
     try {
-      await axios.post("http://localhost:3000/api/events", eventData);
+      await axios.post("http://localhost:3000/api/events", {
+        eventData,
+        headers: { Authorization: `Bearer ${token}` },
+      })
       toast.success("Event created successfully");
       setEventName("");
       setDescription("");

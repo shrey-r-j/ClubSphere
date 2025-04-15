@@ -1,7 +1,7 @@
 import express from "express";
 import Event from "../models/Event.js";
 import Student from "../models/Student.js"; // Assuming you have a Student model
-
+import {auth2,auth3} from "../middleware/auth.middleware.js"; // Assuming you have an auth middleware
 const router = express.Router();
 
 // Fetch all events for a specific club
@@ -19,7 +19,7 @@ router.get("/:clubName", async (req, res) => {
 
 
 // Create a new event with a Base64 image
-router.post("/", async (req, res) => {
+router.post("/", auth2, async (req, res) => {
   try {
     const { clubName, eventName, description, date, image, imgType, credit_hours } = req.body;
 
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
 });
 
 // Mark attendance for an event
-router.post("/:eventId/attendance", async (req, res) => {
+router.post("/:eventId/attendance", auth2, async (req, res) => {
   try {
     const { eventId } = req.params;
     const { attendance } = req.body; 
@@ -140,7 +140,7 @@ router.get("/details/:eventId", async (req, res) => {
 });
 
 
-router.put("/update-attendance/:eventId", async (req, res) => {
+router.put("/update-attendance/:eventId", auth3, async (req, res) => {
   try {
     const { eventId } = req.params;
     const { rollNumber, status } = req.body;
@@ -178,22 +178,31 @@ router.put("/attendance/lock/:eventId", async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // Get approved students
-    const approvedStudents = event.attendance.filter(att => att.status === "Approved");
+    // Get students who are approved but haven't received credit for this event
+    const newlyApprovedStudents = event.attendance.filter(
+      att => att.status === "Approved" && !att.creditGranted
+    );
 
-    if (approvedStudents.length === 0) {
-      return res.status(400).json({ message: "No approved attendance found" });
+    if (newlyApprovedStudents.length === 0) {
+      return res.status(400).json({ message: "No new approved attendance found for this event" });
     }
 
     const creditHours = parseInt(event.credit_hours, 10);
 
-    // Update students in bulk using `$inc`
+    // Update student records in bulk
     await Student.updateMany(
-      { rollNo: { $in: approvedStudents.map(s => s.rollNumber) } }, 
+      { rollNo: { $in: newlyApprovedStudents.map(s => s.rollNumber) } }, 
       { $inc: { completedHours: creditHours } }
     );
 
-    res.status(200).json({ message: "Attendance locked successfully!" });
+    // Mark these students as credited in this specific event
+    await Event.updateOne(
+      { _id: eventId },
+      { $set: { "attendance.$[elem].creditGranted": true } },
+      { arrayFilters: [{ "elem.rollNumber": { $in: newlyApprovedStudents.map(s => s.rollNumber) } }] }
+    );
+
+    res.status(200).json({ message: "Attendance locked successfully for this event!" });
   } catch (error) {
     console.error("Error locking attendance:", error);
     res.status(500).json({ message: "Internal server error" });

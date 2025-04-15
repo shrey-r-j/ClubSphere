@@ -83,6 +83,7 @@ const MarkAttendance = () => {
 
     try {
       await axios.post(`http://localhost:3000/api/events/${eventId}/attendance`, {
+        headers: { Authorization: `Bearer ${token}` },
         attendance: selectedStudents,
       });
       setSubmitSuccess(true);

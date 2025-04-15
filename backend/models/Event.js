@@ -5,6 +5,7 @@ const attendanceSchema = new mongoose.Schema({
   proofImage: { type: String }, 
   imgType: { type: String }, 
   status: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" },
+  creditGranted: { type: Boolean, default: false },
 });
 
 const eventSchema = new mongoose.Schema({
