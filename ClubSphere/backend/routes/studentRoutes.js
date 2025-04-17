@@ -32,7 +32,9 @@ router.post("/signup", async (req, res) => {
     });
 
     await newStudent.save();
-    res.status(201).json({ message: "User created successfully" });
+    const token = jwt.sign({ rollNo: rollNo }, JWT_KEY);
+    res.status(201).json({ message: "User created successfully", token });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to create user" });
@@ -113,6 +115,18 @@ router.get("/club/:clubName", async (req, res) => {
   }
 });
 
+//gethours
+
+router.get('/getall/hours',async (req, res) => {
+  try {
+    const students = await Student.find({}, 'rollNo firstName completedHours');
+    res.json(students);
+  } catch (error) {
+    console.error("Error fetching students' hours:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 // Update Completed Hours (Club Head only)
 router.put("/:rollNo", auth, async (req, res) => {
@@ -139,5 +153,8 @@ router.put("/:rollNo", auth, async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
+
+
 
 export default router;

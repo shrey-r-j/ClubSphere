@@ -1,7 +1,7 @@
 import express from "express";
 import Event from "../models/Event.js";
 import Student from "../models/Student.js"; // Assuming you have a Student model
-
+import {auth2} from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 // Fetch all events for a specific club
@@ -41,7 +41,7 @@ router.post("/:eventId/attendance", async (req, res) => {
   try {
     const { eventId } = req.params;
     const { attendance } = req.body; 
-
+    console.log(attendance);
     if (!attendance || !Array.isArray(attendance) || attendance.length === 0) {
       return res.status(400).json({ message: "Attendance list is required" });
     }

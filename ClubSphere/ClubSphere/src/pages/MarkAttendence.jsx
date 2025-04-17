@@ -83,8 +83,11 @@ const MarkAttendance = () => {
 
     try {
       await axios.post(`http://localhost:3000/api/events/${eventId}/attendance`, {
+        
         attendance: selectedStudents,
+        
       });
+      console.log(selectedStudents)
       setSubmitSuccess(true);
       setTimeout(() => setSubmitSuccess(false), 3000); // Hide success message after 3 seconds
       setSelectedStudents([]);

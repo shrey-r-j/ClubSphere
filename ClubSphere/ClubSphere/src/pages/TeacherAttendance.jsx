@@ -2,6 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { 
+  Calendar, 
+  Download, 
+  Eye, 
+  Lock, 
+  Clock, 
+  Users, 
+  AlertCircle, 
+  CheckCircle, 
+  FileDown
+} from "lucide-react";
 
 const TeacherAttendance = () => {
   const [events, setEvents] = useState([]);
@@ -58,9 +69,7 @@ const TeacherAttendance = () => {
     fetchTeacherEvents();
   }, [clubName]);
 
-
   const handleLockAttendance = async (eventId) => {
-    // console.log("Locking attendance for event ID:", eventId);
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("Token not found. Please log in.");
@@ -83,96 +92,182 @@ const TeacherAttendance = () => {
     }
   };
 
-
   const viewEventDetails = (eventId) => {
     navigate(`/teacher/event-attendance/${eventId}`);
   };
 
+  const downloadCSV = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found. Please log in.");
+      return;
+    }
+  
+    try {
+      const response = await axios.get("http://localhost:3000/api/students/getall/hours");
+  
+      const eligibleStudents = response.data.filter(
+        (student) => student.completedHours > 29
+      );
+      console.log(eligibleStudents);
+      if (eligibleStudents.length === 0) {
+        toast.error("No students have completed more than 30 hours.");
+        return;
+      }
+  
+      const csvHeader = ["Roll No", "First Name", "Credits Granted"];
+      const csvRows = eligibleStudents.map((student) => [
+        student.rollNo,
+        student.firstName || "N/A",
+        1 || 0,
+      ]);
+  
+      const csvContent = [
+        csvHeader.join(","),
+        ...csvRows.map((row) => row.join(",")),
+      ].join("\n");
+  
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  
+      // Create download link
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "Eligible_Students.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Clean up the URL
+    } catch (error) {
+      console.error("Download CSV Error:", error);
+      toast.error("Failed to download CSV.");
+    }
+  };
+  
   if (loading) return (
-    <div className="flex justify-center items-center h-64">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    <div className="flex justify-center items-center h-screen">
+      <div className="flex flex-col items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+        <p className="mt-4 text-gray-600 font-medium">Loading events...</p>
+      </div>
     </div>
   );
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <div className="mb-8 bg-white rounded-lg shadow-md p-5 border-l-4 border-blue-500">
-        <h1 className="text-3xl font-bold text-gray-800">Manage Student Attendance</h1>
-        <p className="text-gray-600 mt-2">Review and approve attendance for {clubName} club events</p>
+      <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-600 transition-all hover:shadow-xl">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+              <Users className="mr-3 text-blue-600" size={28} />
+              Manage Student Attendance
+            </h1>
+            <p className="text-gray-600 mt-2 flex items-center">
+              <Calendar className="mr-2 text-blue-500" size={18} />
+              Review and approve attendance for <span className="font-semibold ml-1 mr-1">{clubName}</span>club events
+            </p>
+          </div>
+          <button
+            onClick={downloadCSV}
+            className="mt-4 md:mt-0 px-5 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-lg"
+          >
+            <FileDown className="mr-2" size={20} />
+            Download Students CSV (30+ Hours)
+          </button>
+        </div>
       </div>
 
       {events.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-8 text-center">
-          <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <p className="text-xl text-gray-600 mt-4">No events found for {clubName} club.</p>
-          <p className="text-gray-500 mt-2">Once events are created, they will appear here.</p>
+        <div className="bg-white rounded-lg shadow-lg p-12 text-center border border-gray-100">
+          <div className="flex justify-center">
+            <Calendar className="w-20 h-20 text-gray-400" />
+          </div>
+          <p className="text-2xl text-gray-700 mt-6 font-medium">No events found for {clubName} club</p>
+          <p className="text-gray-500 mt-3">Once events are created, they will appear here for attendance management</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {events.map((event) => {
             const pendingCount = event.attendance.filter(record => record.status === "Pending").length;
             const approvedCount = event.attendance.filter(record => record.status === "Approved").length;
             const totalCount = event.attendance.length;
+            const approvalPercentage = totalCount > 0 ? Math.round((approvedCount / totalCount) * 100) : 0;
 
             return (
-              <div key={event._id} className="rounded-lg shadow-lg overflow-hidden bg-white transition-transform duration-300 hover:shadow-xl">
-                <div className="bg-blue-600 p-4 text-white">
-                  <h2 className="text-xl font-semibold">{event.eventName}</h2>
-                  <p className="text-blue-100">Date: {new Date(event.date).toLocaleDateString(undefined, {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}</p>
+              <div key={event._id} className="rounded-xl shadow-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-xl border border-gray-100 hover:border-blue-200">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-5 text-white">
+                  <h2 className="text-xl font-semibold flex items-center">
+                    <Calendar className="mr-2" size={20} />
+                    {event.eventName}
+                  </h2>
+                  <p className="text-blue-100 mt-2 flex items-center">
+                    <Clock className="mr-2" size={16} />
+                    {new Date(event.date).toLocaleDateString(undefined, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
                 </div>
 
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex space-x-2">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                <div className="p-6">
+                  <div className="flex flex-wrap items-center justify-between mb-5 gap-2">
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium flex items-center">
+                        <Users size={14} className="mr-1" />
                         Club: {event.clubName}
                       </span>
                       {pendingCount > 0 && (
-                        <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                        <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium flex items-center">
+                          <AlertCircle size={14} className="mr-1" />
                           {pendingCount} Pending
+                        </span>
+                      )}
+                      {approvedCount > 0 && (
+                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium flex items-center">
+                          <CheckCircle size={14} className="mr-1" />
+                          {approvedCount} Approved
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="mb-4">
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div className="mb-6">
+                    <div className="flex justify-between mb-1 text-sm text-gray-600">
+                      <span className="font-medium">Approval Progress</span>
+                      <span className="font-medium">{approvalPercentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-3">
                       <div
-                        className="bg-green-600 h-2.5 rounded-full"
-                        style={{ width: `${totalCount > 0 ? (approvedCount / totalCount) * 100 : 0}%` }}
+                        className={`h-3 rounded-full ${
+                          approvalPercentage > 80 ? 'bg-green-600' : 
+                          approvalPercentage > 50 ? 'bg-blue-600' : 
+                          approvalPercentage > 20 ? 'bg-yellow-500' : 'bg-red-500'
+                        }`}
+                        style={{ width: `${approvalPercentage}%` }}
                       ></div>
                     </div>
-                    <div className="flex justify-between mt-1 text-sm text-gray-600">
-                      <span>{approvedCount} Approved</span>
-                      <span>{totalCount} Total</span>
+                    <div className="flex justify-between mt-1 text-xs text-gray-500">
+                      <span>{approvedCount} of {totalCount} approved</span>
+                      <span>{totalCount - approvedCount} remaining</span>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row gap-3 mt-4">
                     <button
                       onClick={() => viewEventDetails(event._id)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center"
+                      className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center shadow-md"
                     >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      </svg>
-                      View Attendance Details
+                      <Eye className="mr-2" size={18} />
+                      View Details
                     </button>
-                  </div>
-
-                  <div className="self-center mt-4">
+                    
                     <button
                       onClick={() => handleLockAttendance(event._id)}
-                      className="px-4 mt-3  py-2 bg-green-500 text-white rounded-lg hover:bg-gray-800 transition duration-200"
+                      className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center shadow-md"
                     >
+                      <Lock className="mr-2" size={18} />
                       Lock Attendance
                     </button>
                   </div>

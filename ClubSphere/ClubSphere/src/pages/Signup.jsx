@@ -53,7 +53,7 @@ const Signup = () => {
       if (response.status === 201) {
         localStorage.setItem("token",response.data.token);
         toast.success("Registration Successful");
-        navigate("/");
+        navigate("/student");
       }
     } catch (error) {
       toast.error("Something Went Wrong !");

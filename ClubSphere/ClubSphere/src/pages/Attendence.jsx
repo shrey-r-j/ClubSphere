@@ -68,9 +68,11 @@ const Attendance = () => {
               <p className="text-gray-500 mt-2">
   Date: {new Date(event.date).toLocaleDateString()} | Credit Hours: {event.credit_hours}
 </p>
+{/*  */}
               <NavLink
                 to={`/clubhead/mark/${event._id}`}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 w-full"
+                className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:shadow-lg active:shadow-inner transition-all font-semibold flex items-center justify-center gap-3"
+        
               >
                 Mark Attendance
               </NavLink>
