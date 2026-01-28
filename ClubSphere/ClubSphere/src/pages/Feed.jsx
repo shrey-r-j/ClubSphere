@@ -40,6 +40,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const theme = useThemeStore(state => state.theme);
+  const [lkcnt,setlkcnt]=useState(0);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -47,6 +48,7 @@ function App() {
         const res = await axios.get('http://localhost:3000/api/posts');
         const sortedPosts = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setPosts(sortedPosts);
+        // console.log(sortedPosts);
       } catch (error) {
         console.error('Error fetching posts:', error);
       } finally {
@@ -77,6 +79,10 @@ function App() {
     }
   };
 
+  function incrementCount(){
+    setlkcnt(lkcnt+1);
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-base-100 to-base-200" data-theme={theme}>
@@ -87,6 +93,8 @@ function App() {
       </div>
     );
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-base-100 to-base-200" data-theme={theme}>
@@ -152,9 +160,10 @@ function App() {
                   {/* Interaction Bar */}
                   <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-300">
                     <div className="flex space-x-4">
-                      <button className="flex items-center space-x-1 text-base-content/70 hover:text-pink-500 transition-colors duration-200 group">
-                        <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-semibold">Like</span>
+                      <button onClick={incrementCount} className="flex items-center space-x-1 text-base-content/70 hover:text-pink-500 transition-colors duration-200 group">
+                        <Heart 
+                        className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-semibold">Like </span>
                       </button>
                     </div>
                     
@@ -174,5 +183,6 @@ function App() {
     </div>
   );
 }
+// console.log(lkcnt);
 
 export default App;

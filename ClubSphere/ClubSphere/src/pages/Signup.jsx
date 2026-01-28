@@ -49,7 +49,7 @@ const Signup = () => {
         primaryClub: formData.primaryClub,
         password: formData.password,
       });
-
+ 
       if (response.status === 201) {
         localStorage.setItem("token",response.data.token);
         toast.success("Registration Successful");

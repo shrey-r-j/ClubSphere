@@ -98,6 +98,8 @@ router.get("/:rollNo", auth, async (req, res) => {
   }
 });
 
+//get Student List
+
 router.get("/club/:clubName", async (req, res) => {
   try {
     const { clubName } = req.params;

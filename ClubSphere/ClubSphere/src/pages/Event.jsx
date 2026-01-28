@@ -240,7 +240,7 @@ const EventCreation = () => {
                   type="number"
                   min="0"
                   max="30"
-                  step="0.5"
+                  step="1"
                   value={credit_hours}
                   onChange={(e) => setCreditHours(e.target.value)}
                   className="w-full pl-10 px-5 py-4 border-0 bg-white rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/50 text-gray-700 transition-all"

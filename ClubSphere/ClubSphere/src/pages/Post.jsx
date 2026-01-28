@@ -14,7 +14,7 @@ const ProfessionalUploader = () => {
     const fetchClubDetails = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        console.error("Token not found. Please log in.");
+        toast.error("Token not found. Please log in.");
         return;
       }
       try {

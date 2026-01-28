@@ -28,7 +28,7 @@ app.use('/api/events', eventRoutes);
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb://127.0.0.1:27017/club_sphere",
+      process.env.MONGO_URI,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
