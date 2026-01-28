@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import logo from "../assets/logo.png";
-import { useThemeStore } from "../store/useThemeStore";
+import { useThemeStore } from "../store/useThemeStore.js";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { THEMES } from "../constants";

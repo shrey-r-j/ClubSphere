@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../pages/NavBar";
-import TeacherNavbar from "../pages/NavbarTeacher";
+import TeacherNavbar from "../pages/NavbarTeacher.jsx";
 
 const TeacherLayout = () => (
   <div>

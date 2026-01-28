@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Heart, Clock, MessageCircle, Share2 } from 'lucide-react';
-import { useThemeStore } from '../store/useThemeStore';
+import { useThemeStore } from '../store/useThemeStore.js';
 
 import ACM from "../assets/ACM.jpg"
 import Art from "../assets/ArtCircle.jpeg"
