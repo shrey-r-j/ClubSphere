@@ -12,7 +12,7 @@ const TeacherLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/teachers/login', {
+      const response = await axios.post('http://import.meta.env.VITE_BACKEND_URL:3000/api/teachers/login', {
         ID,
         password,
       });

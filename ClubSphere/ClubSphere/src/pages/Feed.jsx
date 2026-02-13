@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/posts');
+        const res = await axios.get('http://import.meta.env.VITE_BACKEND_URL:3000/api/posts');
         const sortedPosts = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setPosts(sortedPosts);
         // console.log(sortedPosts);

@@ -23,7 +23,7 @@ const EventAttendanceDetails = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:3000/api/events/details/${eventId}`, {
+        const response = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/details/${eventId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -43,7 +43,7 @@ const EventAttendanceDetails = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:3000/api/events/update-attendance/${eventId}`,
+        `http://import.meta.env.VITE_BACKEND_URL:3000/api/events/update-attendance/${eventId}`,
         { rollNumber, status },
         { 
           headers: { 

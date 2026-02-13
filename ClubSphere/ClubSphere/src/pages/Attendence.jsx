@@ -14,7 +14,7 @@ const Attendance = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/clubheads/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/clubheads/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -32,7 +32,7 @@ const Attendance = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/events/${clubName}`);
+        const res = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/${clubName}`);
         setEvents(res.data);
       } catch (error) {
         console.error("Error fetching events:", error); 

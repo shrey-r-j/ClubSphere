@@ -28,7 +28,7 @@ const TeacherAttendance = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/teachers/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/teachers/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -54,7 +54,7 @@ const TeacherAttendance = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:3000/api/events/${clubName}`, {
+        const response = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/${clubName}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -78,7 +78,7 @@ const TeacherAttendance = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/events/attendance/lock/${eventId}`,
+        `http://import.meta.env.VITE_BACKEND_URL:3000/api/events/attendance/lock/${eventId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -104,7 +104,7 @@ const TeacherAttendance = () => {
     }
   
     try {
-      const response = await axios.get("http://localhost:3000/api/students/getall/hours");
+      const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/students/getall/hours");
   
       const eligibleStudents = response.data.filter(
         (student) => student.completedHours > 29

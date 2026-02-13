@@ -18,7 +18,7 @@ const Proof = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/students/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/students/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setRollNo(response.data.rollNo);
@@ -36,7 +36,7 @@ const Proof = () => {
 
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/events/student/${rollNo}`);
+        const response = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/student/${rollNo}`);
         if (Array.isArray(response.data)) {
           setEvents(response.data);
         } else {
@@ -89,7 +89,7 @@ const Proof = () => {
       };
 
       try {
-        await axios.post(`http://localhost:3000/api/events/proof/${eventId}`, payload, {
+        await axios.post(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/proof/${eventId}`, payload, {
           headers: { "Content-Type": "application/json" },
         });
         toast.success("Proof uploaded successfully!");

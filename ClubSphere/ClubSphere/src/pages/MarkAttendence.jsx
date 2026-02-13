@@ -21,7 +21,7 @@ const MarkAttendance = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/clubheads/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/clubheads/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,7 +48,7 @@ const MarkAttendance = () => {
     
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:3000/api/students/club/${clubName}`, {
+        const res = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/students/club/${clubName}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStudents(res.data);
@@ -82,7 +82,7 @@ const MarkAttendance = () => {
     }
 
     try {
-      await axios.post(`http://localhost:3000/api/events/${eventId}/attendance`, {
+      await axios.post(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/${eventId}/attendance`, {
         
         attendance: selectedStudents,
         

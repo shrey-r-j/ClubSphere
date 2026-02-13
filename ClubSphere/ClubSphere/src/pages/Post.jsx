@@ -18,7 +18,7 @@ const ProfessionalUploader = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/clubheads/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/clubheads/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -86,7 +86,7 @@ const ProfessionalUploader = () => {
     };
 
     try {
-      await axios.post("http://localhost:3000/api/posts", postData);
+      await axios.post("http://import.meta.env.VITE_BACKEND_URL:3000/api/posts", postData);
       toast.success("Post created successfully");
 
       // Reset form

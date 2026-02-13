@@ -9,7 +9,7 @@ const UpcomingEvents = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/api/events/${clubname}`);
+                const res = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/events/${clubname}`);
                 setEvents(res.data);
             } catch (error) {
                 console.error("Error fetching events:", error);

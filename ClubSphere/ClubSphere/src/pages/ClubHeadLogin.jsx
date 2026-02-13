@@ -12,7 +12,7 @@ const ClubheadLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/clubheads/login', {
+      const response = await axios.post('http://import.meta.env.VITE_BACKEND_URL:3000/api/clubheads/login', {
         clubName,
         password,
       });

@@ -44,7 +44,7 @@ const Dashboard2 = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/clubheads/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/clubheads/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +65,7 @@ const Dashboard2 = () => {
       if (!clubName) return; 
 
       try {
-        const res = await axios.get(`http://localhost:3000/api/posts/${clubName}`);
+        const res = await axios.get(`http://import.meta.env.VITE_BACKEND_URL:3000/api/posts/${clubName}`);
         setPosts(res.data);
       } catch (error) {
         console.error("Error fetching club posts:", error);

@@ -15,7 +15,7 @@ const AttendedEvents = () => {
         }
   
         try {
-          const response = await axios.get("http://localhost:3000/api/students/events/attended", {
+          const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/students/events/attended", {
             headers: { Authorization: `Bearer ${token}` },
           });
   

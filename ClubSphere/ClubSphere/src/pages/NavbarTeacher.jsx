@@ -30,7 +30,7 @@ const TeacherNavbar = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/api/teachers/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/teachers/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

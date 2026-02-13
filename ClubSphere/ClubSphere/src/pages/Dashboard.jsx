@@ -27,7 +27,7 @@ const Dashboard = () => {
       }
   
       try {
-        const response = await axios.get("http://localhost:3000/api/students/me", {
+        const response = await axios.get("http://import.meta.env.VITE_BACKEND_URL:3000/api/students/me", {
           headers: {
             Authorization: `Bearer ${token}`
           },
